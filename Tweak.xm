@@ -26,8 +26,6 @@ BOOL addedImage = NO;
 
 %hook SpringBoard
 - (BOOL)isShowingHomescreen {
-  HBLogDebug(@"update isShowingHomescreen");
-
   BOOL showing = %orig;
   if (!showing) {
     [imageView stopAnimating];
