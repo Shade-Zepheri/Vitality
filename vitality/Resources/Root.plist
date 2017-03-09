@@ -42,9 +42,9 @@
 			<key>label</key>
 			<string>Theme</string>
 			<key>valuesDataSource</key>
-			<string>themeValues</string>
+			<string>bundleValues</string>
 			<key>titlesDataSource</key>
-			<string>themeTitles</string>
+			<string>bundleTitles</string>
 			<key>default</key>
 			<string>Vitality-Default</string>
 			<key>PostNotification</key>
