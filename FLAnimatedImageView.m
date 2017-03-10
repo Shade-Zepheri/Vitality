@@ -107,9 +107,9 @@
             // Stop animating before the animated image gets cleared out.
             [self stopAnimating];
         }
-        
+
         _animatedImage = animatedImage;
-        
+
         self.currentFrame = animatedImage.posterImage;
         self.currentFrameIndex = 0;
         if (animatedImage.loopCount > 0) {
@@ -118,13 +118,13 @@
             self.loopCountdown = NSUIntegerMax;
         }
         self.accumulator = 0.0;
-        
+
         // Start animating after the new animated image has been set.
         [self updateShouldAnimate];
         if (self.shouldAnimate) {
             [self startAnimating];
         }
-        
+
         [self.layer setNeedsDisplay];
     }
 }
@@ -145,7 +145,7 @@
 - (void)didMoveToSuperview
 {
     [super didMoveToSuperview];
-    
+
     [self updateShouldAnimate];
     if (self.shouldAnimate) {
         [self startAnimating];
@@ -158,7 +158,7 @@
 - (void)didMoveToWindow
 {
     [super didMoveToWindow];
-    
+
     [self updateShouldAnimate];
     if (self.shouldAnimate) {
         [self startAnimating];
@@ -198,14 +198,14 @@
 {
     // Default to let UIImageView handle the sizing of its image, and anything else it might consider.
     CGSize intrinsicContentSize = [super intrinsicContentSize];
-    
+
     // If we have have an animated image, use its image size.
     // UIImageView's intrinsic content size seems to be the size of its image. The obvious approach, simply calling `-invalidateIntrinsicContentSize` when setting an animated image, results in UIImageView steadfastly returning `{UIViewNoIntrinsicMetric, UIViewNoIntrinsicMetric}` for its intrinsicContentSize.
     // (Perhaps UIImageView bypasses its `-image` getter in its implementation of `-intrinsicContentSize`, as `-image` is not called after calling `-invalidateIntrinsicContentSize`.)
     if (self.animatedImage) {
         intrinsicContentSize = self.image.size;
     }
-    
+
     return intrinsicContentSize;
 }
 
@@ -232,7 +232,7 @@
         // Clear out the animated image and implicitly pause animation playback.
         self.animatedImage = nil;
     }
-    
+
     super.image = image;
 }
 
@@ -289,7 +289,7 @@ static NSUInteger gcd(NSUInteger a, NSUInteger b)
             // link which will lead to the deallocation of both the display link and the weak proxy.
             FLWeakProxy *weakProxy = [FLWeakProxy weakProxyForObject:self];
             self.displayLink = [CADisplayLink displayLinkWithTarget:weakProxy selector:@selector(displayDidRefresh:)];
-            
+
             [self.displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:self.runLoopMode];
         }
 
@@ -367,7 +367,7 @@ static NSUInteger gcd(NSUInteger a, NSUInteger b)
         FLLog(FLLogLevelWarn, @"Trying to animate image when we shouldn't: %@", self);
         return;
     }
-    
+
     NSNumber *delayTimeNumber = [self.animatedImage.delayTimesForIndexes objectForKey:@(self.currentFrameIndex)];
     // If we don't have a frame delay (e.g. corrupt frame), don't update the view but skip the playhead to the next frame (in else-block).
     if (delayTimeNumber) {
@@ -381,9 +381,9 @@ static NSUInteger gcd(NSUInteger a, NSUInteger b)
                 [self.layer setNeedsDisplay];
                 self.needsDisplayWhenImageBecomesAvailable = NO;
             }
-            
+
             self.accumulator += displayLink.duration * displayLink.frameInterval;
-            
+
             // While-loop first inspired by & good Karma to: https://github.com/ondalabs/OLImageView/blob/master/OLImageView.m
             while (self.accumulator >= delayTime) {
                 self.accumulator -= delayTime;
@@ -394,7 +394,7 @@ static NSUInteger gcd(NSUInteger a, NSUInteger b)
                     if (self.loopCompletionBlock) {
                         self.loopCompletionBlock(self.loopCountdown);
                     }
-                    
+
                     if (self.loopCountdown == 0) {
                         [self stopAnimating];
                         return;
