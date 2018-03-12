@@ -1,5 +1,4 @@
 #import <Preferences/PSListController.h>
-#import "../FLAnimatedImageView.h"
 #import "../FLAnimatedImage.h"
 
 @interface VLYPreviewGifController : PSListController

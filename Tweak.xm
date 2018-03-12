@@ -1,5 +1,4 @@
 #import "FLAnimatedImage.h"
-#import "FLAnimatedImageView.h"
 #import "headers.h"
 #import "VLYSettings.h"
 
