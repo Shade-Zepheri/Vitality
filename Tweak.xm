@@ -50,8 +50,6 @@ void respring_notification(CFNotificationCenterRef center, void *observer, CFStr
 }
 
 %ctor {
-    if (IN_SPRINGBOARD) {
-      CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, &respring_notification, CFSTR("com.shade.vitality/Respring"), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
-    }
+    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, &respring_notification, CFSTR("com.shade.vitality/Respring"), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
     CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)reloadSettings, CFSTR("com.shade.vitality/ReloadPrefs"), NULL, CFNotificationSuspensionBehaviorCoalesce);
 }
