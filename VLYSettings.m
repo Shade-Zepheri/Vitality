@@ -1,41 +1,53 @@
 #import "VLYSettings.h"
+#import <Cephei/HBPreferences.h>
 
-@implementation VLYSettings
+// Pref keys
+static NSString *const VLYPreferencesEnabledKey = @"enabled";
+static NSString *const VLYPreferencesCurrentBundleNameKey = @"currentWallpaper";
+
+@implementation VLYSettings {
+    HBPreferences *_preferences;
+
+    NSString *_bundleName;
+}
 
 + (instancetype)sharedSettings {
-	static VLYSettings *sharedSettings;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		sharedSettings = [[self alloc] init];
-	});
+    static VLYSettings *sharedSettings = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedSettings = [[self alloc] init];
+    });
 
-	return sharedSettings;
+    return sharedSettings;
 }
 
 - (instancetype)init {
-	if (self = [super init]) {
-		[self reloadSettings];
-	}
+    self = [super init];
+    if (self) {
+        // Create prefs
+        _preferences = [HBPreferences preferencesForIdentifier:@"com.shade.vitality"];
 
-	return self;
+        // Register defaults
+        [_preferences registerBool:&_enabled default:YES forKey:VLYPreferencesEnabledKey];
+        [_preferences registerObject:&_bundleName default:@"Vitality-Default.bundle" forKey:VLYPreferencesCurrentBundleNameKey];
+
+        // Observe when change
+        NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+        [center addObserver:self selector:@selector(preferencesUpdated) name:HBPreferencesDidChangeNotification object:nil];
+    }
+
+    return self;
 }
 
-- (void)reloadSettings {
-	CFPreferencesAppSynchronize(CFSTR("com.shade.vitality"));
-	_enabled = !CFPreferencesCopyAppValue(CFSTR("enabled"), CFSTR("com.shade.vitality")) ? YES : [(__bridge id)CFPreferencesCopyAppValue(CFSTR("enabled"), CFSTR("com.shade.vitality")) boolValue];
-	NSString *themeBundleName = !CFPreferencesCopyAppValue(CFSTR("currentWallpaper"), CFSTR("com.shade.vitality")) ? @"Vitality-Default.bundle" : (__bridge id)CFPreferencesCopyAppValue(CFSTR("currentWallpaper"), CFSTR("com.shade.vitality"));
+#pragma mark - Callback
 
-	NSURL *bundleURL = [[NSURL alloc] initFileURLWithPath:@"/Library/Application Support/Vitality/Wallpapers/"];
-	NSBundle *themeAssets = [[NSBundle alloc] initWithURL:[bundleURL URLByAppendingPathComponent:themeBundleName]];
+- (void)preferencesUpdated {
+    //Get new data
+    NSURL *bundlesURL = [NSURL fileURLWithPath:@"/Library/Application Support/Vitality/Wallpapers/"];
+    NSBundle *themeBundle = [NSBundle bundleWithURL:[bundlesURL URLByAppendingPathComponent:_bundleName]];
 
-	NSURL *pathURL;
-	if ([[NSFileManager defaultManager] fileExistsAtPath:[themeAssets pathForResource:@"wallpaper" ofType:@"gif"]]) {
-		pathURL = [NSURL fileURLWithPath:[themeAssets pathForResource:@"wallpaper" ofType:@"gif"]];
-	} else {
-		pathURL = [NSURL fileURLWithPath:@"/Library/Application Support/Vitality/Wallpapers/Vitality-Default.bundle/wallpaper.gif"];
-	}
-
-	_animatedImageData = [NSData dataWithContentsOfURL:pathURL];
+    NSURL *pathURL = [NSURL fileURLWithPath:[themeBundle pathForResource:@"wallpaper" ofType:@"gif"]];
+    _animatedImageData = [NSData dataWithContentsOfURL:pathURL];
 }
 
 @end

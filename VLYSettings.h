@@ -1,9 +1,8 @@
-@interface VLYSettings : NSObject {
-	NSDictionary *_settings;
-}
-@property (nonatomic, readonly) BOOL enabled;
-@property (nonatomic, readonly) NSData *animatedImageData;
+@interface VLYSettings : NSObject
 
 + (instancetype)sharedSettings;
-- (void)reloadSettings;
+
+@property (readonly, nonatomic) BOOL enabled;
+@property (strong, readonly, nonatomic) NSData *animatedImageData;
+
 @end

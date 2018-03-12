@@ -11,7 +11,8 @@ include $(THEOS)/makefiles/common.mk
 TWEAK_NAME = Vitality
 Vitality_FILES = $(wildcard *.x) $(wildcard *.m)
 Vitality_FRAMEWORKS = UIKit QuartzCore ImageIO MobileCoreServices
-VitalityCFLAGS = -fobjc-arc
+Vitality_EXTRA_FRAMEWORKS = Cephei
+Vitality_CFLAGS = -fobjc-arc
 
 BUNDLE_NAME = Vitality-Default
 Vitality-Default_INSTALL_PATH = /Library/Application Support/Vitality/Wallpapers/
