@@ -18,6 +18,7 @@
         appearanceSettings.tintColor = [UIColor colorWithRed:0.98 green:0.66 blue:0.15 alpha:1.0];
         appearanceSettings.navigationBarTitleColor = [UIColor whiteColor];
         appearanceSettings.navigationBarBackgroundColor = [UIColor colorWithRed:0.00 green:0.54 blue:0.48 alpha:1.0];
+        appearanceSettings.statusBarTintColor = [UIColor whiteColor];
         appearanceSettings.translucentNavigationBar = NO;
         self.hb_appearanceSettings = appearanceSettings;
     }
