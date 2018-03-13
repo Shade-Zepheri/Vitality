@@ -34,7 +34,7 @@
     self.navigationItem.rightBarButtonItem = previewButton;
 }
 
-#pragma mark - Support
+#pragma mark - Supporting methods
 
 - (void)respring {
     // TODO: get rid need to respring

@@ -8,7 +8,7 @@ static NSString *const VLYPreferencesCurrentBundleNameKey = @"currentWallpaper";
 @implementation VLYSettings {
     HBPreferences *_preferences;
 
-    NSString *_bundleName;
+    NSString *_currentBundle;
 }
 
 + (instancetype)sharedSettings {
@@ -29,7 +29,7 @@ static NSString *const VLYPreferencesCurrentBundleNameKey = @"currentWallpaper";
 
         // Register defaults
         [_preferences registerBool:&_enabled default:YES forKey:VLYPreferencesEnabledKey];
-        [_preferences registerObject:&_bundleName default:@"Vitality-Default.bundle" forKey:VLYPreferencesCurrentBundleNameKey];
+        [_preferences registerObject:&_currentBundle default:@"Vitality-Default.bundle" forKey:VLYPreferencesCurrentBundleNameKey];
 
         // Observe when change
         NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
@@ -43,11 +43,11 @@ static NSString *const VLYPreferencesCurrentBundleNameKey = @"currentWallpaper";
 
 - (void)preferencesUpdated {
     //Get new data
-    NSURL *bundlesURL = [NSURL fileURLWithPath:@"/Library/Application Support/Vitality/Wallpapers/"];
-    NSBundle *themeBundle = [NSBundle bundleWithURL:[bundlesURL URLByAppendingPathComponent:_bundleName]];
+    NSURL *bundlesURL = [NSURL fileURLWithPath:@"/var/mobile/Library/Vitality/"];
+    NSBundle *themeBundle = [NSBundle bundleWithURL:[bundlesURL URLByAppendingPathComponent:_currentBundle]];
 
-    NSURL *pathURL = [NSURL fileURLWithPath:[themeBundle pathForResource:@"wallpaper" ofType:@"gif"]];
-    _animatedImageData = [NSData dataWithContentsOfURL:pathURL];
+    NSURL *wallpaperURL = [themeBundle URLForResource:@"wallpaper" withExtension:@"gif"];
+    _animatedImageData = [NSData dataWithContentsOfURL:wallpaperURL];
 }
 
 @end

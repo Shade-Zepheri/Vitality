@@ -15,7 +15,7 @@ Vitality_EXTRA_FRAMEWORKS = Cephei
 Vitality_CFLAGS = -fobjc-arc
 
 BUNDLE_NAME = Vitality-Default
-Vitality-Default_INSTALL_PATH = /Library/Application Support/Vitality/Wallpapers/
+Vitality-Default_INSTALL_PATH = /var/mobile/Library/Vitality/
 
 SUBPROJECTS = vitality
 
