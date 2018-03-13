@@ -1,9 +1,9 @@
-export TARGET = iphone:10.1
+export TARGET = iphone:11.2:9.0
 
 INSTALL_TARGET_PROCESSES = Preferences
 
 ifneq ($(RESPRING),0)
-		INSTALL_TARGET_PROCESSES += SpringBoard
+    INSTALL_TARGET_PROCESSES += SpringBoard
 endif
 
 include $(THEOS)/makefiles/common.mk

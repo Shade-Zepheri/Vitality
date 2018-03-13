@@ -1,59 +1,70 @@
-#include "VLYRootListController.h"
+#import "VLYRootListController.h"
+#import "VLYPreviewGifController.h"
 #import <CepheiPrefs/HBSupportController.h>
 #import <CepheiPrefs/HBAppearanceSettings.h>
-#import "VLYPreviewGifController.h"
 
 @implementation VLYRootListController
 
+#pragma mark - HBListController
+
 + (NSString *)hb_specifierPlist {
-  return @"Root";
+    return @"Root";
 }
 
 - (instancetype)init {
-  self = [super init];
-  if (self) {
-    HBAppearanceSettings *appearanceSettings = [[HBAppearanceSettings alloc] init];
-    appearanceSettings.tintColor = [UIColor colorWithRed:0.07 green:0.42 blue:0.46 alpha:1.0];
-    appearanceSettings.invertedNavigationBar = YES;
-    self.hb_appearanceSettings = appearanceSettings;
-  }
+    self = [super init];
+    if (self) {
+        HBAppearanceSettings *appearanceSettings = [[HBAppearanceSettings alloc] init];
+        appearanceSettings.tintColor = [UIColor colorWithRed:0.47 green:0.10 blue:0.00 alpha:1.0];
+        appearanceSettings.navigationBarTitleColor = [UIColor whiteColor];
+        appearanceSettings.navigationBarBackgroundColor = [UIColor colorWithRed:0.00 green:0.47 blue:0.42 alpha:1.0];
+        appearanceSettings.translucentNavigationBar = NO;
+        self.hb_appearanceSettings = appearanceSettings;
+    }
 
-  return self;
+    return self;
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-  [super viewWillAppear:animated];
-  UIBarButtonItem *previewButton = [[UIBarButtonItem alloc] initWithTitle:@"Preview" style:UIBarButtonItemStylePlain target:self action:@selector(previewGif)];
-  [(UINavigationItem*)self.navigationItem setRightBarButtonItem:previewButton animated:NO];
+#pragma mark - UIViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+
+    UIBarButtonItem *previewButton = [[UIBarButtonItem alloc] initWithTitle:@"Preview" style:UIBarButtonItemStylePlain target:self action:@selector(previewGif)];
+    self.navigationItem.rightBarButtonItem = previewButton;
 }
+
+#pragma mark - Support
 
 - (void)showSupportEmailController {
-	UIViewController *viewController = (UIViewController *)[HBSupportController supportViewControllerForBundle:[NSBundle bundleForClass:self.class] preferencesIdentifier:@"com.dopeteam.tails"];
-	[self.navigationController pushViewController:viewController animated:YES];
+    UIViewController *viewController = (UIViewController *)[HBSupportController supportViewControllerForBundle:[NSBundle bundleForClass:self.class] preferencesIdentifier:@"com.dopeteam.tails"];
+    [self.navigationController pushViewController:viewController animated:YES];
 }
 
 - (void)respring {
-  CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("com.shade.vitality/Respring"), nil, nil, YES);
+    // TODO: get rid need to respring
+    CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("com.shade.vitality/Respring"), nil, nil, YES);
 }
 
 - (NSArray *)bundleTitles {
-  NSMutableArray* files = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:kBundlePath error:nil] mutableCopy];
-  for (int i = 0; i < files.count; i++) {
-  	NSString *file = [files objectAtIndex:i];
-  	file = [file stringByReplacingOccurrencesOfString:@".bundle" withString:@""];
-  	[files replaceObjectAtIndex:i withObject:file];
-  }
+    NSArray *installedBundles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:VLYBundlesPath error:nil];
+    NSMutableArray *bundleTitles = [NSMutableArray array];
 
-  return files;
+    for (NSString *bundle in installedBundles) {;
+        [bundleTitles addObject:[bundle stringByDeletingPathExtension]];
+    }
+
+    return bundleTitles;
 }
 
 - (NSArray *)bundleValues {
-  NSMutableArray* files = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:kBundlePath error:nil] mutableCopy];
-  return files;
+    return [[NSFileManager defaultManager] contentsOfDirectoryAtPath:VLYBundlesPath error:nil];
 }
 
+#pragma mark - Bar buton
+
 - (void)previewGif {
-  [self pushController:[[VLYPreviewGifController alloc] init]];
+    [self pushController:[[VLYPreviewGifController alloc] init]];
 }
 
 @end
