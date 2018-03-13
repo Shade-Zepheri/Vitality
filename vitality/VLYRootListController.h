@@ -1,8 +1,8 @@
-#import <CepheiPrefs/HBRootListController.h>
+#import <CepheiPrefs/HBAboutListController.h>
 #import <Preferences/PSListController.h>
 
 static NSString *const VLYBundlesPath = @"/Library/Application Support/Vitality/Wallpapers/";
 
-@interface VLYRootListController : HBRootListController
+@interface VLYRootListController : HBAboutListController
 
 @end

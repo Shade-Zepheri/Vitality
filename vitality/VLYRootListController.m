@@ -36,11 +36,6 @@
 
 #pragma mark - Support
 
-- (void)showSupportEmailController {
-    UIViewController *viewController = (UIViewController *)[HBSupportController supportViewControllerForBundle:[NSBundle bundleForClass:self.class] preferencesIdentifier:@"com.dopeteam.tails"];
-    [self.navigationController pushViewController:viewController animated:YES];
-}
-
 - (void)respring {
     // TODO: get rid need to respring
     CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("com.shade.vitality/Respring"), nil, nil, YES);
