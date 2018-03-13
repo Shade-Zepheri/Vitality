@@ -12,7 +12,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _settings = [NSClassFromString(@"VLYSettings") sharedSettings];
+        _settings = [VLYSettings sharedSettings];
     }
 
     return self;
