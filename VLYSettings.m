@@ -33,7 +33,8 @@ static NSString *const VLYPreferencesCurrentBundleNameKey = @"currentWallpaper";
 
         // Observe when change
         NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-        [center addObserver:self selector:@selector(preferencesUpdated) name:HBPreferencesDidChangeNotification object:nil];
+        [center addObserver:self selector:@selector(preferencesWereUpdated) name:HBPreferencesDidChangeNotification object:nil];
+        [self preferencesWereUpdated];
     }
 
     return self;
@@ -41,7 +42,7 @@ static NSString *const VLYPreferencesCurrentBundleNameKey = @"currentWallpaper";
 
 #pragma mark - Callback
 
-- (void)preferencesUpdated {
+- (void)preferencesWereUpdated {
     //Get new data
     NSURL *bundlesURL = [NSURL fileURLWithPath:@"/var/mobile/Library/Vitality/"];
     NSBundle *themeBundle = [NSBundle bundleWithURL:[bundlesURL URLByAppendingPathComponent:_currentBundle]];
