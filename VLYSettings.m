@@ -1,5 +1,4 @@
 #import "VLYSettings.h"
-#import <Cephei/HBPreferences.h>
 
 // Pref keys
 static NSString *const VLYPreferencesEnabledKey = @"enabled";
@@ -40,7 +39,7 @@ static NSString *const VLYPreferencesCurrentBundleNameKey = @"currentWallpaper";
     return self;
 }
 
-#pragma mark - Callback
+#pragma mark - Callbacks
 
 - (void)preferencesWereUpdated {
     //Get new data
@@ -49,6 +48,10 @@ static NSString *const VLYPreferencesCurrentBundleNameKey = @"currentWallpaper";
 
     NSURL *wallpaperURL = [themeBundle URLForResource:@"wallpaper" withExtension:@"gif"];
     _animatedImageData = [NSData dataWithContentsOfURL:wallpaperURL];
+}
+
+- (void)registerPreferenceChangeBlock:(HBPreferencesChangeCallback)callback {
+    [_preferences registerPreferenceChangeBlock:callback];
 }
 
 @end
