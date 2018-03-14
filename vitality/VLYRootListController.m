@@ -1,5 +1,4 @@
 #import "VLYRootListController.h"
-#import "VLYPreviewGifController.h"
 #import <CepheiPrefs/HBSupportController.h>
 #import <CepheiPrefs/HBAppearanceSettings.h>
 
@@ -26,15 +25,6 @@
     return self;
 }
 
-#pragma mark - UIViewController
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-
-    UIBarButtonItem *previewButton = [[UIBarButtonItem alloc] initWithTitle:@"Preview" style:UIBarButtonItemStylePlain target:self action:@selector(previewGif)];
-    self.navigationItem.rightBarButtonItem = previewButton;
-}
-
 #pragma mark - Supporting methods
 
 - (NSArray *)bundleTitles {
@@ -50,12 +40,6 @@
 
 - (NSArray *)bundleValues {
     return [[NSFileManager defaultManager] contentsOfDirectoryAtPath:VLYBundlesPath error:nil];
-}
-
-#pragma mark - Bar buton
-
-- (void)previewGif {
-    [self pushController:[[VLYPreviewGifController alloc] init]];
 }
 
 @end

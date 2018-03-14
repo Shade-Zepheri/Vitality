@@ -6,7 +6,7 @@ Vitality_INSTALL_PATH = /Library/PreferenceBundles
 Vitality_FRAMEWORKS = UIKit
 Vitality_PRIVATE_FRAMEWORKS = Preferences
 Vitality_EXTRA_FRAMEWORKS = Cephei CepheiPrefs
-Vitality_CFLAGS = -I../ -fobjc-arc
+Vitality_CFLAGS = -fobjc-arc
 
 include $(THEOS_MAKE_PATH)/bundle.mk
 
