@@ -37,11 +37,6 @@
 
 #pragma mark - Supporting methods
 
-- (void)respring {
-    // TODO: get rid need to respring
-    CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("com.shade.vitality/Respring"), nil, nil, YES);
-}
-
 - (NSArray *)bundleTitles {
     NSArray *installedBundles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:VLYBundlesPath error:nil];
     NSMutableArray *bundleTitles = [NSMutableArray array];
