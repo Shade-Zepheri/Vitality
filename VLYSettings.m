@@ -1,6 +1,6 @@
 #import "VLYSettings.h"
 
-// Pref keys
+// Settings keys
 static NSString *const VLYPreferencesEnabledKey = @"enabled";
 static NSString *const VLYPreferencesCurrentBundleNameKey = @"currentWallpaper";
 
@@ -19,6 +19,8 @@ static NSString *const VLYPreferencesCurrentBundleNameKey = @"currentWallpaper";
 
     return sharedSettings;
 }
+
+#pragma mark - Initializer
 
 - (instancetype)init {
     self = [super init];
