@@ -1,7 +1,6 @@
 #import "FLAnimatedImage.h"
 #import "VLYSettings.h"
 #import <SpringBoard/SBWallpaperController.h>
-#import <SpringBoard/SpringBoard.h>
 
 VLYSettings *settings;
 
@@ -38,22 +37,20 @@ void (^createAnimatedGifView)(NSNotification *) = ^(NSNotification *nsNotificati
     }];
 };
 
-#pragma mark - Hooks
+#pragma mark - Management
 
-%hook SpringBoard
+void (^startOrStopGif)(NSNotification *) = ^(NSNotification *notification) {
+    NSString *name = notification.name;
+    NSDictionary *userInfo = notification.userInfo;
 
-- (void)_updateHomeScreenPresenceNotification:(NSNotification *)notification {
-    %orig;
-
-    // Stop animaing if not visible
-    if (![self isShowingHomescreen]) {
-        [imageView stopAnimating];
-    } else {
+    if ([name isEqualToString:@"SBLockScreenUndimmedNotification"] || [name isEqualToString:@"SBHomescreenIconsWillAppearNotification"]) {
+        // Begin animating because view is visible
         [imageView startAnimating];
-    }
+    } else if ([name isEqualToString:@"SBLockScreenDimmedNotification"] || (userInfo && ![userInfo[@"kSBNotificationKeyDisplayIdentifier"] isEqual:@""])) {
+        // Stop animating because hidden
+        [imageView stopAnimating];
 }
-
-%end
+};
 
 #pragma mark - Constructor
 
@@ -64,4 +61,10 @@ void (^createAnimatedGifView)(NSNotification *) = ^(NSNotification *nsNotificati
     // Add the animated view when SpringBoard loads
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
     [center addObserverForName:UIApplicationDidFinishLaunchingNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:createAnimatedGifView];
+
+    // Register for notifications to start / stop gif apropriately
+    [center addObserverForName:@"SBDisplayDidLaunchNotification" object:nil queue:[NSOperationQueue mainQueue] usingBlock:startOrStopGif];
+    [center addObserverForName:@"SBHomescreenIconsWillAppearNotification" object:nil queue:[NSOperationQueue mainQueue] usingBlock:startOrStopGif];
+    [center addObserverForName:@"SBLockScreenUndimmedNotification" object:nil queue:[NSOperationQueue mainQueue] usingBlock:startOrStopGif];
+    [center addObserverForName:@"SBLockScreenDimmedNotification" object:nil queue:[NSOperationQueue mainQueue] usingBlock:startOrStopGif];
 }
