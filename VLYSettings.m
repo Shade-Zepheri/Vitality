@@ -34,7 +34,7 @@ static NSString *const VLYPreferencesCurrentBundleNameKey = @"currentWallpaper";
 
         // Observe when change
         NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-        [center addObserver:self selector:@selector(preferencesWereUpdated) name:HBPreferencesDidChangeNotification object:nil];
+        [center addObserver:self selector:@selector(preferencesWereUpdated) name:HBPreferencesDidChangeNotification object:_preferences];
         [self preferencesWereUpdated];
     }
 
@@ -50,6 +50,7 @@ static NSString *const VLYPreferencesCurrentBundleNameKey = @"currentWallpaper";
 
     NSURL *wallpaperURL = [themeBundle URLForResource:@"wallpaper" withExtension:@"gif"];
     _animatedImageData = [NSData dataWithContentsOfURL:wallpaperURL];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"VLYSettingsUpdatedNotification" object:nil userInfo:nil];
 }
 
 - (void)registerPreferenceChangeBlock:(HBPreferencesChangeCallback)callback {

@@ -8,7 +8,8 @@ FLAnimatedImageView *imageView;
 
 #pragma mark - Setup
 
-void updateAnimatedWallpaperView() {
+// Cuz registerPreferenceChangeBlock dont wanna work
+void (^updateAnimatedWallpaperView)(NSNotification *) = ^(NSNotification *notification) {
     // Create and set animatedImage
     NSData *data = settings.animatedImageData;
     FLAnimatedImage *image = [FLAnimatedImage animatedImageWithGIFData:data];
@@ -16,9 +17,9 @@ void updateAnimatedWallpaperView() {
 
     // Hide view if not enabled
     imageView.hidden = !settings.enabled;
-}
+};
 
-void (^createAnimatedGifView)(NSNotification *) = ^(NSNotification *nsNotification) {
+void (^createAnimatedGifView)(NSNotification *) = ^(NSNotification *notification) {
     // Create imageView
     imageView = [[FLAnimatedImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     imageView.contentMode = UIViewContentModeScaleAspectFill;
@@ -28,13 +29,13 @@ void (^createAnimatedGifView)(NSNotification *) = ^(NSNotification *nsNotificati
     UIWindow *wallpaperWindow = [[%c(SBWallpaperController) sharedInstance] _window];
     [wallpaperWindow addSubview:imageView];
 
-    // Add the image
-    updateAnimatedWallpaperView();
-
-    // Have the view update when setting does
+/*  Dont work rn
+    // Add the image & have the view update when setting does
     [settings registerPreferenceChangeBlock:^{
         updateAnimatedWallpaperView();
     }];
+*/
+    updateAnimatedWallpaperView(nil);
 };
 
 #pragma mark - Management
@@ -49,7 +50,7 @@ void (^startOrStopGif)(NSNotification *) = ^(NSNotification *notification) {
     } else if ([name isEqualToString:@"SBLockScreenDimmedNotification"] || (userInfo && ![userInfo[@"kSBNotificationKeyDisplayIdentifier"] isEqual:@""])) {
         // Stop animating because hidden
         [imageView stopAnimating];
-}
+    }
 };
 
 #pragma mark - Constructor
@@ -61,6 +62,7 @@ void (^startOrStopGif)(NSNotification *) = ^(NSNotification *notification) {
     // Add the animated view when SpringBoard loads
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
     [center addObserverForName:UIApplicationDidFinishLaunchingNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:createAnimatedGifView];
+    [center addObserverForName:@"VLYSettingsUpdatedNotification" object:nil queue:[NSOperationQueue mainQueue] usingBlock:updateAnimatedWallpaperView];
 
     // Register for notifications to start / stop gif apropriately
     [center addObserverForName:@"SBDisplayDidLaunchNotification" object:nil queue:[NSOperationQueue mainQueue] usingBlock:startOrStopGif];
