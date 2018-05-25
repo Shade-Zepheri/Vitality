@@ -1,5 +1,4 @@
 #import "VLYRootListController.h"
-#import <CepheiPrefs/HBSupportController.h>
 #import <CepheiPrefs/HBAppearanceSettings.h>
 
 @implementation VLYRootListController
@@ -10,7 +9,7 @@
     return @"Root";
 }
 
-#pragma mark - View management
+#pragma mark - Initialization
 
 - (instancetype)init {
     self = [super init];
