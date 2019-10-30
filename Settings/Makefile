@@ -4,8 +4,8 @@ BUNDLE_NAME = Vitality
 Vitality_FILES = $(wildcard *.m)
 Vitality_INSTALL_PATH = /Library/PreferenceBundles
 Vitality_FRAMEWORKS = UIKit
-Vitality_PRIVATE_FRAMEWORKS = Preferences
 Vitality_EXTRA_FRAMEWORKS = Cephei CepheiPrefs
+Vitality_LDFLAGS = Preferences.tbd
 
 include $(THEOS_MAKE_PATH)/bundle.mk
 

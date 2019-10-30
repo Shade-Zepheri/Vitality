@@ -1,6 +1,6 @@
 #import "FLAnimatedImage.h"
 #import "VLYSettings.h"
-#import <SpringBoard/SBWallpaperController.h>
+#import "SBWallpaperController+Private.h"
 
 VLYSettings *settings;
 
