@@ -1,6 +1,7 @@
 #import "FLAnimatedImage.h"
 #import "VLYSettings.h"
 #import "SBWallpaperController+Private.h"
+#import <SpringBoard/SpringBoard.h>
 
 VLYSettings *settings;
 
@@ -39,11 +40,12 @@ void (^createAnimatedGifView)(NSNotification *) = ^(NSNotification *notification
 void (^startOrStopGif)(NSNotification *) = ^(NSNotification *notification) {
     NSString *name = notification.name;
     NSDictionary *userInfo = notification.userInfo;
+    BOOL showingHomescreen = [(SpringBoard *)[UIApplication sharedApplication] isShowingHomescreen];
 
     if ([name isEqualToString:@"SBLockScreenUndimmedNotification"] || [name isEqualToString:@"SBHomescreenIconsWillAppearNotification"]) {
         // Begin animating because view is visible
         [imageView startAnimating];
-    } else if ([name isEqualToString:@"SBLockScreenDimmedNotification"] || (userInfo && ![userInfo[@"kSBNotificationKeyDisplayIdentifier"] isEqual:@""])) {
+    } else if ([name isEqualToString:@"SBLockScreenDimmedNotification"] || (userInfo && ![userInfo[@"kSBNotificationKeyDisplayIdentifier"] isEqual:@""]) || ([name isEqualToString:@"SBHomescreenDisplayChangedNotification"] && !showingHomescreen)) {
         // Stop animating because hidden
         [imageView stopAnimating];
     }
@@ -53,14 +55,15 @@ void (^startOrStopGif)(NSNotification *) = ^(NSNotification *notification) {
 
 %ctor {
     // Create singleton
-    settings = [VLYSettings sharedSettings];
+    settings = VLYSettings.sharedSettings;
 
     // Add the animated view when SpringBoard loads
-    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
     [center addObserverForName:UIApplicationDidFinishLaunchingNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:createAnimatedGifView];
 
     // Register for notifications to start / stop gif apropriately
     [center addObserverForName:@"SBDisplayDidLaunchNotification" object:nil queue:[NSOperationQueue mainQueue] usingBlock:startOrStopGif];
+    [center addObserverForName:@"SBHomescreenDisplayChangedNotification" object:nil queue:[NSOperationQueue mainQueue] usingBlock:startOrStopGif];
     [center addObserverForName:@"SBHomescreenIconsWillAppearNotification" object:nil queue:[NSOperationQueue mainQueue] usingBlock:startOrStopGif];
     [center addObserverForName:@"SBLockScreenUndimmedNotification" object:nil queue:[NSOperationQueue mainQueue] usingBlock:startOrStopGif];
     [center addObserverForName:@"SBLockScreenDimmedNotification" object:nil queue:[NSOperationQueue mainQueue] usingBlock:startOrStopGif];
