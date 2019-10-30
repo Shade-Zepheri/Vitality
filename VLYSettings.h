@@ -2,8 +2,7 @@
 #import <Cephei/HBPreferences.h>
 
 @interface VLYSettings : NSObject
-
-+ (instancetype)sharedSettings;
+@property (class, strong, readonly) VLYSettings *sharedSettings;
 
 @property (readonly, nonatomic) BOOL enabled;
 @property (strong, readonly, nonatomic) NSData *animatedImageData;
