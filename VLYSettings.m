@@ -33,8 +33,7 @@ static NSString *const VLYPreferencesCurrentBundleNameKey = @"currentWallpaper";
         [_preferences registerObject:&_currentBundle default:@"Vitality-Default.bundle" forKey:VLYPreferencesCurrentBundleNameKey];
 
         // Observe when change
-        NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-        [center addObserver:self selector:@selector(preferencesWereUpdated) name:HBPreferencesDidChangeNotification object:_preferences];
+        [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(preferencesWereUpdated) name:HBPreferencesDidChangeNotification object:_preferences];
         [self preferencesWereUpdated];
     }
 
@@ -44,13 +43,12 @@ static NSString *const VLYPreferencesCurrentBundleNameKey = @"currentWallpaper";
 #pragma mark - Callbacks
 
 - (void)preferencesWereUpdated {
-    //Get new data
+    // Get new data
     NSURL *bundlesURL = [NSURL fileURLWithPath:@"/var/mobile/Library/Vitality/"];
     NSBundle *themeBundle = [NSBundle bundleWithURL:[bundlesURL URLByAppendingPathComponent:_currentBundle]];
 
     NSURL *wallpaperURL = [themeBundle URLForResource:@"wallpaper" withExtension:@"gif"];
     _animatedImageData = [NSData dataWithContentsOfURL:wallpaperURL];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"VLYSettingsUpdatedNotification" object:nil userInfo:nil];
 }
 
 - (void)registerPreferenceChangeBlock:(HBPreferencesChangeCallback)callback {
