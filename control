@@ -7,3 +7,7 @@ Description: Animated Wallpapers
 Maintainer: Shade Zepheri <ziroalpha@gmail.com>
 Author: Shade Zepheri <ziroalpha@gmail.com>
 Section: Tweaks
+Icon: file:///Library/PreferenceBundles/Vitality.bundle/icon@2x.png
+Depiction: https://shade-zepheri.github.io/depic/index.html?p=com.shade.vitality
+SileoDepiction: https://shade-zepheri.github.io/depic/com.shade.vitality/sileo.json
+Tag: compatible::ios10, compatible::ios11, compatible::ios12
