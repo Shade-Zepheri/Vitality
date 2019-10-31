@@ -1,7 +1,7 @@
 Package: com.shade.vitality
 Name: Vitality
 Depends: mobilesubstrate, preferenceloader, ws.hbang.common (>= 1.11)
-Version: 0.3-1
+Version: 0.4
 Architecture: iphoneos-arm
 Description: Animated Wallpapers
 Maintainer: Shade Zepheri <ziroalpha@gmail.com>
